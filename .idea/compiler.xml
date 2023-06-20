@@ -10,6 +10,8 @@
         <module name="itstack-demo-netty-1-01" />
         <module name="itstack-demo-netty-1-02" />
         <module name="itstack-demo-netty-1-03" />
+        <module name="itstack-demo-netty-1-04" />
+        <module name="itstack-demo-netty-1-05" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
