@@ -9,10 +9,14 @@ import java.util.List;
 
 /**
  * 自定义解码器
- * 
- * 
- * 
- * 
+ * 整包数据测试
+ * 02 34 68 69 68 69 03 
+ * 半包数据测试
+ * 02 34 68 69 68 69
+ * 03                   
+ * 粘包数据测试
+ * 02 34 68 69 68 69 03 02 34
+ * 68 69 68 69 03 
  */
 public class MyDecoder extends ByteToMessageDecoder {
 
@@ -35,7 +39,8 @@ public class MyDecoder extends ByteToMessageDecoder {
             // 标记包头开始的index
             in.markReaderIndex();
             // 读到了协议的开始标志，结束while循环
-            if (in.readByte() == 0x02) {
+            byte readByte = in.readByte();
+            if (readByte == 0x02) {
                 break;
             }
             // 未读到包头，略过一个字节
