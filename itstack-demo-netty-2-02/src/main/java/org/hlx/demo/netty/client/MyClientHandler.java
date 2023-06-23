@@ -1,4 +1,4 @@
-package org.hlx.demo.netty.server;
+package org.hlx.demo.netty.client;
 
 import com.googlecode.protobuf.format.JsonFormat;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,7 +15,7 @@ import java.util.Date;
  * 
  * 
  */
-public class MyServerHandler extends ChannelInboundHandlerAdapter {
+public class MyClientHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 当客户端主动链接服务端的链接后，这个通道就是活跃的了。也就是客户端与服务端建立了通信通道并且可以传输数据
@@ -24,12 +24,12 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         SocketChannel channel = (SocketChannel) ctx.channel();
         System.out.println("链接报告开始");
-        System.out.println("链接报告信息：有一客户端链接到本服务端。channelId：" + channel.id());
+        System.out.println("链接报告信息：本客户端链接到服务端。channelId：" + channel.id());
         System.out.println("链接报告IP:" + channel.localAddress().getHostString());
         System.out.println("链接报告Port:" + channel.localAddress().getPort());
         System.out.println("链接报告完毕");
         //通知客户端链接建立成功
-        String str = "通知客户端链接建立成功" + " " + new Date() + " " + channel.localAddress().getHostString() + "\r\n";
+        String str = "通知服务端链接建立成功" + " " + new Date() + " " + channel.localAddress().getHostString();
         ctx.writeAndFlush(MsgUtil.buildMsg(channel.id().toString(), str));
     }
 
@@ -38,7 +38,7 @@ public class MyServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("客户端断开链接" + ctx.channel().localAddress().toString());
+        System.out.println("断开链接" + ctx.channel().localAddress().toString());
     }
 
     @Override
