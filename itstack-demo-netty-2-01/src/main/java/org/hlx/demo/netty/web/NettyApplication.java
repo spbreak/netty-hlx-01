@@ -17,7 +17,7 @@ import java.net.InetSocketAddress;
  * 
  */
 @SpringBootApplication
-@ComponentScan("org.itstack.demo.netty")
+@ComponentScan("org.hlx.demo.netty")
 public class NettyApplication implements CommandLineRunner {
 
     @Value("${netty.host}")
