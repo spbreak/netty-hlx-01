@@ -1,37 +1,42 @@
 package org.hlx.demo.netty.server;
 
-import io.netty.bootstrap.Bootstrap;
+import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- * 
  * 
  * 
  * 
  */
 public class NettyServer {
 
-    public static void main(String[] args) throws InterruptedException {
-        EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-                    .channel(NioDatagramChannel.class)
-                    .option(ChannelOption.SO_BROADCAST, true)    //广播
-                    .option(ChannelOption.SO_RCVBUF, 2048 * 1024)// 设置UDP读缓冲区为2M
-                    .option(ChannelOption.SO_SNDBUF, 1024 * 1024)// 设置UDP写缓冲区为1M
-                    .handler(new MyChannelInitializer());
+    public static void main(String[] args) {
+        new NettyServer().bing(7397);
+    }
 
-            ChannelFuture f = b.bind(7397).sync();
-            System.out.println("itstack-demo-netty udp server start done. ");
+    private void bing(int port) {
+        //配置服务端NIO线程组
+        EventLoopGroup parentGroup = new NioEventLoopGroup(); //NioEventLoopGroup extends MultithreadEventLoopGroup Math.max(1, SystemPropertyUtil.getInt("io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2));
+        EventLoopGroup childGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(parentGroup, childGroup)
+                    .channel(NioServerSocketChannel.class)    //非阻塞模式
+                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .childHandler(new MyChannelInitializer());
+            ChannelFuture f = b.bind(port).sync();
+            System.out.println("itstack-demo-netty server start done.");
             f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
-            //优雅的关闭释放内存
-            group.shutdownGracefully();
+            childGroup.shutdownGracefully();
+            parentGroup.shutdownGracefully();
         }
 
     }

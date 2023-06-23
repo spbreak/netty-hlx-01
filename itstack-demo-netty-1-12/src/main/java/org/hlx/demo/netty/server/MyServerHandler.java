@@ -1,9 +1,12 @@
 package org.hlx.demo.netty.server;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.EmptyByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.socket.DatagramPacket;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.http.*;
 
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
@@ -13,21 +16,55 @@ import java.util.Date;
  * 
  * 
  * 
- * 
  */
-public class MyServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
+public class MyServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
-        String msg = packet.content().toString(Charset.forName("GBK"));
-        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " UDP服务端接收到消息：" + msg);
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
-        //向客户端发送消息
-        String json = "通知：我已经收到你的消息\r\n";
-        // 由于数据报的数据是以字符数组传的形式存储的，所以传转数据
-        byte[] bytes = json.getBytes(Charset.forName("GBK"));
-        DatagramPacket data = new DatagramPacket(Unpooled.copiedBuffer(bytes), packet.sender());
-        ctx.writeAndFlush(data);//向客户端发送消息
+        if (msg instanceof HttpRequest) {
+            DefaultHttpRequest request = (DefaultHttpRequest) msg;
+            System.out.println("URI:" + request.getUri());
+            System.err.println(msg);
+        }
+
+        if (msg instanceof HttpContent) {
+            LastHttpContent httpContent = (LastHttpContent) msg;
+            ByteBuf byteData = httpContent.content();
+            if (!(byteData instanceof EmptyByteBuf)) {
+                //接收msg消息
+                byte[] msgByte = new byte[byteData.readableBytes()];
+                byteData.readBytes(msgByte);
+                System.out.println(new String(msgByte, Charset.forName("UTF-8")));
+            }
+        }
+
+        String sendMsg = 
+                "AAAA\n" +
+                "BBBB\n" +
+                "XXXX\n" +
+                "CCCC";
+
+        FullHttpResponse response = new DefaultFullHttpResponse(
+                HttpVersion.HTTP_1_1,
+                HttpResponseStatus.OK,
+                Unpooled.wrappedBuffer(sendMsg.getBytes(Charset.forName("UTF-8"))));
+        response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/plain;charset=UTF-8");
+        response.headers().set(HttpHeaderNames.CONTENT_LENGTH, response.content().readableBytes());
+        response.headers().set(HttpHeaderNames.CONNECTION, HttpHeaderValues.KEEP_ALIVE);
+        ctx.write(response);
+        ctx.flush();
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        ctx.close();
+        cause.printStackTrace();
     }
 
 }
