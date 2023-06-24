@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>itstack-demo-netty-2-03</artifactId>
+    <artifactId>itstack-demo-netty-2-04</artifactId>
 
     <properties>
         <protostuff.version>1.0.10</protostuff.version>
