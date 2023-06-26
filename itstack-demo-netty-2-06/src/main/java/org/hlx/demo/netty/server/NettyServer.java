@@ -11,11 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.net.InetSocketAddress;
 
 /**
- * 消息传输协议
- * 
  * 
  * 
  * 
@@ -24,6 +23,9 @@ import java.net.InetSocketAddress;
 public class NettyServer {
 
     private Logger logger = LoggerFactory.getLogger(NettyServer.class);
+
+    @Resource
+    private MyChannelInitializer myChannelInitializer;
 
     //配置服务端NIO线程组
     private final EventLoopGroup parentGroup = new NioEventLoopGroup(); //NioEventLoopGroup extends MultithreadEventLoopGroup Math.max(1, SystemPropertyUtil.getInt("io.netty.eventLoopThreads", NettyRuntime.availableProcessors() * 2));
@@ -37,7 +39,7 @@ public class NettyServer {
             b.group(parentGroup, childGroup)
                     .channel(NioServerSocketChannel.class)    //非阻塞模式
                     .option(ChannelOption.SO_BACKLOG, 128)
-                    .childHandler(new MyChannelInitializer());
+                    .childHandler(myChannelInitializer);
 
             channelFuture = b.bind(address).syncUninterruptibly();
             channel = channelFuture.channel();
@@ -45,9 +47,9 @@ public class NettyServer {
             logger.error(e.getMessage());
         } finally {
             if (null != channelFuture && channelFuture.isSuccess()) {
-                System.out.println("itstack-demo-netty server start done. ");
+                logger.info("itstack-demo-netty server start done. {关注公众号：bugstack虫洞栈，获取源码}");
             } else {
-                System.out.println("itstack-demo-netty server start error. ");
+                logger.error("itstack-demo-netty server start error. {关注公众号：bugstack虫洞栈，获取源码}");
             }
         }
         return channelFuture;

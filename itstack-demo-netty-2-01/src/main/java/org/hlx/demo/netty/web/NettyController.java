@@ -1,6 +1,6 @@
 package org.hlx.demo.netty.web;
 
-import org.hlx.demo.netty.server.NettyServer;
+import org.hlx.demo.netty.service.NettyServer;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,6 +1,6 @@
 package org.hlx.demo.test;
 
-import org.hlx.demo.netty.server.NettyServer;
+import org.hlx.demo.netty.service.NettyServer;
 
 /**
  * 

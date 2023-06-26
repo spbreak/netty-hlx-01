@@ -1,7 +1,7 @@
 package org.hlx.demo.netty.web;
 
 import io.netty.channel.ChannelFuture;
-import org.hlx.demo.netty.server.NettyServer;
+import org.hlx.demo.netty.service.NettyServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
