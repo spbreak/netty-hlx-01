@@ -11,11 +11,11 @@ import org.hlx.demo.netty.util.SerializationUtil;
  * 
  * 
  */
-public class ObjEncoder extends MessageToByteEncoder {
+public class RpcEncoder extends MessageToByteEncoder {
 
     private Class<?> genericClass;
 
-    public ObjEncoder(Class<?> genericClass) {
+    public RpcEncoder(Class<?> genericClass) {
         this.genericClass = genericClass;
     }
 

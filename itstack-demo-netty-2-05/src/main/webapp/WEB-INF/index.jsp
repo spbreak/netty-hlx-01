@@ -1,6 +1,5 @@
 <%--
   虫洞栈：https://bugstack.cn
-  公众号：bugstack虫洞栈  ｛获取学习源码｝
   Create by fuzhengwei on 2019
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -193,7 +192,7 @@ body{
 				<div class="msgBlock_msgInfo" style="height:auto;width:280px;float:left;margin-left:12px; margin-top:4px;border-radius:3px;-moz-border-radius:3px; ">
 					<div style="width:4px; height:20px; background-color:#CC0000; float:left;border-radius:3px;-moz-border-radius:3px;"></div>
 					<div class="point" style="float:left;width:260px; padding:7px; background-color:#FFFFFF; border-radius:3px;-moz-border-radius:3px; height:auto; font-size:12px;display:block;word-break: break-all;word-wrap: break-word;">
-						微信公众号：bugstack虫洞栈，欢迎您的关注&获取源码！https://bugstack.cn
+						
 <br/><br/>
 本公众号会每天定时推送科技资料；专题、源码、书籍、视频、咨询、面试、环境等方面内容。尤其在技术专题方面会提供更多的原创内容，让更多的程序员可以从最基础开始了解到技术全貌，目前已经对外提供的有；《手写RPC框架》、《用Java实现JVM》、《基于JavaAgent的全链路监控》、《Netty案例》等专题。
 <br/><br/>

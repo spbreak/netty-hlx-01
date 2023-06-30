@@ -13,11 +13,11 @@ import java.util.List;
  * 
  * 
  */
-public class ObjDecoder extends ByteToMessageDecoder {
+public class RpcDecoder extends ByteToMessageDecoder {
 
     private Class<?> genericClass;
 
-    public ObjDecoder(Class<?> genericClass) {
+    public RpcDecoder(Class<?> genericClass) {
         this.genericClass = genericClass;
     }
 
